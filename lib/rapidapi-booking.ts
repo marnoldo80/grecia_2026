@@ -100,6 +100,7 @@ async function fetchHotels(
     languagecode: 'it',
     page_number: '1',
     units: 'metric',
+    ...(params.numBathrooms > 1 ? { min_bathrooms: String(params.numBathrooms) } : {}),
   });
 
   const res = await fetch(`${BASE_URL}/searchHotels?${query.toString()}`, {
@@ -275,10 +276,34 @@ function buildBookingDescription(hotel: Record<string, unknown>): string {
 }
 
 function buildBookingUrl(hotel: Record<string, unknown>): string {
-  if (typeof hotel.url === 'string') return hotel.url;
+  // 1. Use the API-provided URL if available (may be relative)
+  if (typeof hotel.url === 'string' && hotel.url.trim().length > 5) {
+    const u = hotel.url.trim();
+    return u.startsWith('/') ? `https://www.booking.com${u}` : u;
+  }
+
+  // 2. Build slug from hotel name (Booking URLs use name-slug, not numeric ID)
+  const rawName = String(hotel.hotel_name ?? hotel.name ?? '');
+  if (rawName) {
+    const slug = rawName
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')   // remove diacritics
+      .replace(/[^a-z0-9\s-]/g, '')       // remove special chars
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-{2,}/g, '-');
+    if (slug) return `https://www.booking.com/hotel/gr/${slug}.it.html`;
+  }
+
+  // 3. Fallback: search results page for this hotel
   const id = hotel.hotel_id ?? hotel.id;
-  if (id) return `https://www.booking.com/hotel/gr/${id}.it.html`;
-  return 'https://www.booking.com';
+  const name = String(hotel.hotel_name ?? hotel.name ?? 'grecia');
+  if (id) {
+    return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}&dest_type=hotel&dest_id=${id}`;
+  }
+
+  return 'https://www.booking.com/searchresults.html?ss=grecia';
 }
 
 function extractNumber(

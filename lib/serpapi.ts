@@ -237,19 +237,21 @@ export async function searchSiteSpecific(
     return [];
   }
 
-  const optionsStr = params.options.length > 0 ? params.options.join(' ') : '';
   const typeStr =
     params.accommodationType && params.accommodationType !== 'qualsiasi'
       ? params.accommodationType
-      : '';
+      : 'alloggio';
+
+  // Use concise query: too many terms → 0 Google results
+  // Priority: location + type. Options only if ≤ 2 selected.
+  const optionKeywords = params.options.slice(0, 2).join(' ');
 
   const q = [
     `site:${site}`,
-    'grecia',
     params.location,
+    'grecia',
     typeStr,
-    'agosto 2026',
-    optionsStr,
+    optionKeywords,
   ]
     .filter(Boolean)
     .join(' ');

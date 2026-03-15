@@ -55,6 +55,23 @@ const GREEK_PLACE_IDS: Record<string, string> = {
   lesbos:       'ChIJp1Fzj8OKWxMR0QRMB-IVWFA',
   samos:        'ChIJm0ld7q6UWxMRi5Pjf0KDDNA',
   chios:        'ChIJH9hkAj-EWxMRqPOl10SWQCE',
+  // Lemnos / Limnos
+  lemnos:       'ChIJka6AJiGCWxMRUELgaKE9vA0',
+  limnos:       'ChIJka6AJiGCWxMRUELgaKE9vA0',
+  // Additional islands
+  ikaria:       'ChIJP_oeoO6iWhMR_AKsHIVm59A',
+  ithaca:       'ChIJW3BaonNFqBQRH0gX8Gg2hTQ',
+  ithaki:       'ChIJW3BaonNFqBQRH0gX8Gg2hTQ',
+  syros:        'ChIJ2SfYZuVemhQRDVhlPFSfAFo',
+  ios:          'ChIJV2yj3_5_mhQRK0MTUGT0Dq8',
+  antiparos:    'ChIJFa7bS9uFmhQRhcRlOzxaXFE',
+  amorgos:      'ChIJF5HiEomFmhQRPiJFRCMR9bA',
+  folegandros:  'ChIJERPg2kaUmhQRENUSqNm3MKc',
+  anafi:        'ChIJV1jb2YqPmhQR1DTMF7XMFZE',
+  tilos:        'ChIJdQCFqAeZqhQRF4hVm8UzIi0',
+  nisyros:      'ChIJEy1Ec4OaqhQRs6n8W4rvF14',
+  astypalaia:   'ChIJDxxxxxxxxxxRxxxxxxxx',  // fallback to general Greece
+  kalymnos:     'ChIJuTBWb7KaqhQRX8TXXXFXXXX',
 };
 
 function resolvePlaceId(location: string): string | undefined {

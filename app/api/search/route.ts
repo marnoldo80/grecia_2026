@@ -61,6 +61,8 @@ export async function POST(req: NextRequest) {
     bookingResults,
     lastminuteResults,
     hometogoResults,
+    casevacanzaResults,
+    greekaResults,
   ] = await Promise.all([
     safeCall('Google Hotels', () => searchGoogleHotels(params)),
     safeCall('Airbnb', () => searchAirbnb(params)),
@@ -71,14 +73,22 @@ export async function POST(req: NextRequest) {
     safeCall('HomeToGo', () =>
       searchSiteSpecific(params, 'hometogo.it', 'HomeToGo')
     ),
+    safeCall('CaseVacanza', () =>
+      searchSiteSpecific(params, 'casevacanza.it', 'CaseVacanza')
+    ),
+    safeCall('Greeka', () =>
+      searchSiteSpecific(params, 'greeka.com', 'Greeka')
+    ),
   ]);
 
   // 3. Enrich web-search results (Lastminute, HomeToGo) with Gemini
   //    – extracts price, bedrooms, amenities from raw snippets
   const nights = nightsBetween(params.checkIn ?? '2026-08-01', params.checkOut ?? '2026-08-15');
-  const [enrichedLastminute, enrichedHometogo] = await Promise.all([
+  const [enrichedLastminute, enrichedHometogo, enrichedCasevacanza, enrichedGreeka] = await Promise.all([
     enrichResults(lastminuteResults, nights),
     enrichResults(hometogoResults, nights),
+    enrichResults(casevacanzaResults, nights),
+    enrichResults(greekaResults, nights),
   ]);
 
   // 4. Merge all results and tag with searchId
@@ -88,6 +98,8 @@ export async function POST(req: NextRequest) {
     ...bookingResults,
     ...enrichedLastminute,
     ...enrichedHometogo,
+    ...enrichedCasevacanza,
+    ...enrichedGreeka,
   ].map((r) => ({ ...r, searchId }));
 
   // 4. Deduplicate by URL (case-insensitive, strip trailing slash)

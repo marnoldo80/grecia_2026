@@ -9,6 +9,7 @@ export interface SearchParams {
   accommodationType: string;
   numPeople: number;
   numRooms: number;
+  numBathrooms: number;
   /** YYYY-MM-DD format */
   checkIn: string;
   /** YYYY-MM-DD format */
@@ -49,6 +50,7 @@ export interface SavedSearch {
   accommodation_type: string;
   num_people: number;
   num_rooms: number;
+  num_bathrooms: number;
   check_in: string;
   check_out: string;
   options: string[];

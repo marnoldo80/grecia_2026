@@ -34,6 +34,16 @@ const LOCATION_SUGGESTIONS = [
   'Naxos',
   'Karpathos',
   'Kos',
+  'Lemnos',
+  'Limnos',
+  'Milos',
+  'Thassos',
+  'Skopelos',
+  'Hydra',
+  'Samos',
+  'Lesbos',
+  'Chios',
+  'Halkidiki',
 ];
 
 const ACCOMMODATION_TYPES = [
@@ -75,6 +85,7 @@ export default function SearchForm({ onSearch, isLoading }: SearchFormProps) {
   const [accommodationType, setAccommodationType] = useState('qualsiasi');
   const [numPeople, setNumPeople] = useState(2);
   const [numRooms, setNumRooms] = useState(1);
+  const [numBathrooms, setNumBathrooms] = useState(1);
   const [checkIn, setCheckIn] = useState('2026-08-01');
   const [checkOut, setCheckOut] = useState('2026-08-15');
   const [options, setOptions] = useState<string[]>([]);
@@ -110,6 +121,7 @@ export default function SearchForm({ onSearch, isLoading }: SearchFormProps) {
       accommodationType,
       numPeople,
       numRooms,
+      numBathrooms,
       checkIn,
       checkOut,
       options,
@@ -184,8 +196,8 @@ export default function SearchForm({ onSearch, isLoading }: SearchFormProps) {
         </div>
       </div>
 
-      {/* Row 2 – People + Rooms + Dates */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Row 2 – People + Rooms + Bathrooms + Dates */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {/* People */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -213,6 +225,22 @@ export default function SearchForm({ onSearch, isLoading }: SearchFormProps) {
             max={10}
             value={numRooms}
             onChange={(e) => setNumRooms(Math.max(1, parseInt(e.target.value) || 1))}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          />
+        </div>
+
+        {/* Bathrooms */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            🚿 Bagni
+          </label>
+          <input
+            type="number"
+            min={1}
+            max={10}
+            value={numBathrooms}
+            onChange={(e) => setNumBathrooms(Math.max(1, parseInt(e.target.value) || 1))}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
